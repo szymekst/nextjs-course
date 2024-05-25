@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 const TicketForm = () => {
     const router = useRouter();
+
     const handleChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
@@ -35,8 +36,8 @@ const TicketForm = () => {
         title: "",
         description: "",
         category: "Hardware Problem",
-        progress: 0,
         priority: 1,
+        progress: 0,
         status: "not started",
     };
 
