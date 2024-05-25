@@ -3,11 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
     try {
-        console.log("skibidi", params.id);
         const { id } = params;
-        console.log("id", id);
         const foundTicket = await Ticket.findOne({ _id: id });
-        console.log("found ticket: ", foundTicket);
 
         return NextResponse.json({ foundTicket }, { status: 200 });
     } catch (error) {
@@ -22,6 +19,25 @@ export async function DELETE(req, { params }) {
 
         return NextResponse.json(
             { message: "Ticked Deleted" },
+            { status: 200 }
+        );
+    } catch (error) {
+        return NextResponse.json({ message: "Error", error }, { status: 500 });
+    }
+}
+
+export async function PUT(req, { params }) {
+    try {
+        const { id } = params;
+        const body = await req.json();
+        const ticketData = body.formData;
+
+        const updateTicketData = await Ticket.findByIdAndUpdate(id, {
+            ...ticketData,
+        });
+
+        return NextResponse.json(
+            { message: "Ticked Updated" },
             { status: 200 }
         );
     } catch (error) {

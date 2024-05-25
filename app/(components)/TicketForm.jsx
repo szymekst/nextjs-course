@@ -20,14 +20,27 @@ const TicketForm = ({ ticket }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch("/api/Tickets", {
-            method: "POST",
-            body: JSON.stringify({ formData }),
-            "content-type": "application/json",
-        });
 
-        if (!res.ok) {
-            throw new Error("Failed to create Ticket");
+        if (EDITMODE) {
+            const res = await fetch(`/api/Tickets/${ticket._id}`, {
+                method: "PUT",
+                body: JSON.stringify({ formData }),
+                "content-type": "application/json",
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to create Ticket");
+            }
+        } else {
+            const res = await fetch("/api/Tickets", {
+                method: "POST",
+                body: JSON.stringify({ formData }),
+                "content-type": "application/json",
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to create Ticket");
+            }
         }
 
         router.push("/");
@@ -60,7 +73,9 @@ const TicketForm = ({ ticket }) => {
                 method="post"
                 onSubmit={handleSubmit}
             >
-                <h3>Create Your Ticket</h3>
+                <h3>
+                    {EDITMODE ? "Update your Ticket" : "Create Your Ticket"}
+                </h3>
                 <label htmlFor="title">Title</label>
                 <input
                     type="text"
@@ -133,7 +148,7 @@ const TicketForm = ({ ticket }) => {
                 <input
                     type="submit"
                     className="btn"
-                    value="Create Ticket"
+                    value={EDITMODE ? "Update Ticket" : "Create Ticket"}
                     onClick={handleSubmit}
                 />
             </form>
